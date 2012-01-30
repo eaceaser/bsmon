@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>stats</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar" data-dropdown="dropdown">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="/">stats</a>
+          <ul class="nav">
+            <li class="dropdown">
+            <% host_title = host ? host : "Hosts" %>
+              <a href="#" class="dropdown-toggle"><%= host_title %></a>
+              <ul class="dropdown-menu">
+                <% hosts.each do |host| %>
+                  <li><a href="/host/<%=host%>"><%= host %></a></li>
+                <% end %>
+              </ul>
+            </li>
+
+            <% if plugins %>
+              <li class="dropdown">
+              <%
+                plugin_title = plugin ? plugin : "Plugins"
+              %>
+              <a href="#" class="dropdown-toggle"><%=plugin_title%></a>
+              <ul class="dropdown-menu">
+                <% plugins.each do |plugin| %>
+                  <li><a href="/host/<%=host%>/plugin/<%=plugin%>"><%=plugin%></a></li>
+                <% end %>
+              </ul>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <%= yield %>
+      </div>
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/bootstrap-dropdown.js"></script>
+  </body>

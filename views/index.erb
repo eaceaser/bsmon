@@ -1,0 +1,32 @@
+<script src="/raphael-min.js"></script>
+<script src="/g.raphael-min.js"></script>
+<script src="/g.line-min.js"></script>
+
+<% if graphs %>
+<div class="row">
+  <div class="span4">
+    <ul class="unstyled">
+    <% graphs.each do |graph| %>
+      <li>
+      <a href="/host/<%=host%>/plugin/<%=plugin%>/graph/<%=graph%>"><%=graph%></a>
+      </li>
+    <% end %>
+  </ul>
+  </div>
+  <div class="span12">
+    <% if graph %>
+      <div id="<%=graph%>-holder"></div>
+      <script>
+        window.onload = function() {
+          var r = Raphael("<%=graph%>-holder");
+          var x = <%=graph_data["x"].to_json %>
+          var y = <%=graph_data["y"].to_json %>
+          r.linechart(0, 0, 695, 200, x, [y], { shade: true, axis: "0 0 1 1"});
+        };
+      </script>
+    <% end %>
+    </div>
+  </div>
+</div>
+</div>
+<% end %>
