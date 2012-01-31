@@ -12,8 +12,9 @@ module Collectd
 
   def Collectd.get_plugins(host)
     Dir.glob("#{@@path}/#{host}/*").map do |filename|
+      print filename
       filename.split("/").last
-    end.uniq
+    end
   end
 
   def Collectd.get_graphs(host, plugin)

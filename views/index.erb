@@ -2,31 +2,67 @@
 <script src="/g.raphael-min.js"></script>
 <script src="/g.line-min.js"></script>
 
-<% if graphs %>
 <div class="row">
-  <div class="span4">
-    <ul class="unstyled">
-    <% graphs.each do |graph| %>
+  <ul class="breadcrumb">
+    <li>
+    <span class="divider">/</span>
+    <% if defined? @current_host %>
+      <a href="/host/<%=@current_host%>"><%=@current_host %>
+    <% end %>
+    </li>
+
+    <% if defined? @current_plugin %>
       <li>
-      <a href="/host/<%=host%>/plugin/<%=plugin%>/graph/<%=graph%>"><%=graph%></a>
+      <span class="divider">/</span>
+      <a href="/host/<%=@current_host%>/plugin/<%=@current_plugin%>"><%= @current_plugin %></a>
       </li>
     <% end %>
+
+    <% if defined? @current_graph %>
+      <li>
+      <span class="divider">/</span>
+      <%= @current_graph %>
+      </li>
+      <% end %>
+
   </ul>
-  </div>
-  <div class="span12">
-    <% if graph %>
-      <div id="<%=graph%>-holder"></div>
-      <script>
-        window.onload = function() {
-          var r = Raphael("<%=graph%>-holder");
-          var x = <%=graph_data["x"].to_json %>
-          var y = <%=graph_data["y"].to_json %>
-          r.linechart(0, 0, 695, 200, x, [y], { shade: true, axis: "0 0 1 1"});
-        };
-      </script>
-    <% end %>
-    </div>
-  </div>
 </div>
+
+<div class="row">
+  <% if defined? @plugins %>
+    <ul class="nav tabs">
+      <% @plugins.each do |plugin| %>
+        <li><a href="/host/<%=@current_host%>/plugin/<%=plugin%>"><%=plugin%></a></li>
+      <% end %>
+    </ul>
+  <% elsif defined? @graphs %>
+    <ul class="nav tabs">
+      <% @graphs.each do |graph| %>
+        <li <% if defined?(@current_graph) && graph == @current_graph %>
+        class="active"
+      <% end %>>
+      <a href="/host/<%=@current_host%>/plugin/<%=@current_plugin%>/graph/<%=graph%>"><%=graph%></a></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <ul class="nav tabs">
+      <% @hosts.each do |host| %>
+        <li><a href="/host/<%=host%>"><%=host%></a></li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
-<% end %>
+
+<div class="row">
+  <% if defined? @current_graph %>
+    <div id="graph"></div>
+    <script>
+      $.getJSON("/host/<%=@current_host%>/plugin/<%=@current_plugin%>/graph/<%=@current_graph%>/data", function(data) {
+        var r = Raphael("graph")
+        var x = data.x
+        var y = data.y
+        graph = r.linechart(75, 0, 800, 300, x, y, { shade: true, axis: "0 0 1 1" } )
+      })
+    </script>
+  <% end %>
+</div>
