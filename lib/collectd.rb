@@ -7,14 +7,13 @@ module Collectd
   def Collectd.get_hosts
     Dir.glob("#{@@path}/*").map do |filename|
       filename.split("/").last
-    end
+    end.sort
   end
 
   def Collectd.get_plugins(host)
     Dir.glob("#{@@path}/#{host}/*").map do |filename|
-      print filename
       filename.split("/").last
-    end
+    end.sort
   end
 
   def Collectd.get_graphs(host, plugin)
@@ -23,7 +22,7 @@ module Collectd
         filename = rrd.split("/").last[0..-5]
         filename
       end
-    end.flatten
+    end.flatten.sort
   end
 
   def Collectd.get_rrd_path(host, plugin, graph)

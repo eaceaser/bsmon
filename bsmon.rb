@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/reloader'
+#require 'sinatra/reloader'
 require './lib/collectd'
 require 'rrd'
 require 'json'
@@ -24,7 +24,6 @@ get '/host/:host/plugin/:plugin/graph/:graph/data' do
     data.each do |line|
       xval, yval = line.map { |n| n.to_f }
       next if xval.nan? || yval.nan? || xval == 0
-      puts xval
       x << xval
       y << yval
     end
@@ -43,7 +42,6 @@ get '/host/:name' do
 
   @hosts = Collectd.get_hosts
   @plugins = Collectd.get_plugins(@current_host)
-  print @plugins
   erb :index
 end
 
